@@ -120,14 +120,14 @@ Necessary relationships were implimented between dataset variables as **One-to-M
 
 ### DAX Mesures Description
 
-#### 1. Total Sales
+#### 1. TOTAL SALES
 Summates the gross transactional monetary value across all order line items using the `total_amount` field.
 $$\text{Total Sales} = \sum (\text{totalamount})$$
 
 ```dax
 Total Sales = SUM(purchases[total_amount])
 ```
-#### 2. Total Quantity
+#### 2. TOTAL QTY
 Aggregates the total physical unit volume processed through the checkout using the `quantity` field.
 $$\text{Total Qty} = \sum (\text{quantity})$$
 
@@ -135,11 +135,96 @@ $$\text{Total Qty} = \sum (\text{quantity})$$
 Total Qty = SUM(purchases[quantity])
 ```
 
-#### 3. Average Unit Price
-Calculates the statistical arithmetic mean of the item clearing prices captured at the exact moment of transaction using the `unitprice` field.
+#### 3. AVG UNIT PRICE
+Calculates the statistical arithmetic mean of the item clearing prices captured at the exact moment of transaction using the `unitprice` field.  
 $$\text{Avg Unit Price} = \overline{\text{unitprice}}$$
 
 ```dax
 Avg Unit Price = AVERAGE(purchases[unit_price])
 ```
 
+### Page 2: Products Performance Overview
+![Products Dashboard View](artifacts/Products.png)
+*Figure 3: Main interface of the Products view dashboard page*
+
+---
+
+### DAX Mesures Description
+
+#### 1. AVG RATING
+Calculates the statistical arithmetic mean of user feedback scores across items using the `ratingavg` field.  
+$$\text{Avg Rating} = \overline{\text{ratingavg}}$$
+
+```dax
+Avg Rating = AVERAGE(products[rating_avg])
+```
+
+#### 2. TOTAL UNIT SOLD
+Calculates the aggregate frequency of transactional line items processed by counting rows via the `productid` attribute.  
+$$\text{Total Units Sold} = \text{Count}(\text{productid})$$
+
+```dax
+Total Unit Sold = COUNT(purchases[product_id])
+```
+
+#### 6. TOTAL STOCK
+Calculates the absolute static warehouse inventory capacity across the entire catalog by overriding active filters using the `stock\_quantity` field.  
+$$\text{Total Stock} = \sum_{\text{All Products}} (\text{stockquantity})$$
+
+```dax
+Total Stock = CALCULATE(SUM(products[stock_quantity]), ALL(products))
+```
+
+### Page 3: Interaction Performance Overview
+![Interaction Dashboard View](artifacts/Interactions.png)
+*Figure 2: Main interface of the Interaction view dashboard page*
+
+---
+
+### DAX Mesures Description
+
+#### 1. PCR (Purchase Conversion Rate)
+Calculates the macro-level funnel conversion rate by dividing total purchase events by total micro-behavior product interactions.  
+$$\text{PCR} = \frac{\text{Count}(\text{purchase productid})}{\text{Count}(\text{interaction productid})}$$
+
+```dax
+PCR = DIVIDE(COUNT(purchases[product_id]), COUNT(interactions[product_id]), 0)
+```
+
+#### 2. CTR (Product Click-Through Rate)
+Calculates the proportion of total product interactions that resulted in an explicit click action by isolating "click" events through a conditional filter variable.  
+$$\text{Product CTR} = \frac{\text{Count}(\text{interactiontype} = \text{"click"})}{\text{Total Count}(\text{interactiontype})}$$
+
+```dax
+Product CTR = 
+VAR click_counts = CALCULATE(COUNT(interactions[interaction_type]), 
+                            interactions[interaction_type] == "click")
+VAR total_interactions = COUNT(interactions[interaction_type])
+RETURN
+DIVIDE(click_counts, total_interactions, 0)
+```
+
+#### 3. Cart Abandonment Rate
+Calculates the proportion of intent signals that resulted in a reduction or abandonment of an item from the cart or wishlist, measured against total behavioral interaction footprints.  
+$$\text{Cart Abandonment Rate} = \frac{\text{Count}(\text{interactiontype} = \text{"removefromcart"} \text{ or } \text{"removefromwishlist"})}{\text{Total Count}(\text{interactionid})}$$
+
+```dax
+Cart Abandonment Rate = 
+VAR cart_aband_count = CALCULATE(COUNT(interactions[interaction_type]), 
+                                interactions[interaction_type] == "remove_from_wishlist" || interactions[interaction_type] == "remove_from_cart")
+VAR total_views = COUNT(interactions[interaction_id])
+RETURN
+DIVIDE(cart_aband_count, total_views, 0)
+```
+
+#### 4. Product Engagement Ratio
+Calculates the proportion of passive discovery interactions that successfully converted into high-intent actions (such as clicks, cart additions, or wishlist saves) against total logged interaction footprints.  
+$$\text{Product Engagement Ratio} = \frac{\text{Count}(\text{interactiontype} \in \{\text{"click"}, \text{"addtocart"}, \text{"addtowishlist"}\})}{\text{Total Count}(\text{interactionid})}$$
+
+```dax
+Product Engagement Ratio = 
+VAR engagment_count = CALCULATE(COUNT(interactions[interaction_type]), 
+                                interactions[interaction_type] == "click" ||  interactions[interaction_type] == "add_to_cart" || interactions[interaction_type] == "add_to_wishlist")
+VAR total_views = COUNT(interactions[interaction_id])
+RETURN
+DIVIDE(engagment_count, total_views, 0)
