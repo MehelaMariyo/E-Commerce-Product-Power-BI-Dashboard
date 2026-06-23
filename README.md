@@ -113,7 +113,7 @@ Necessary relationships were implimented between dataset variables as **One-to-M
 ## Dashboard Interface 
 
 ### Page 1: Purchases & Sales Performance Overview
-![Purchases Dashboard View](assets/Purchases.jpg)
+![Purchases Dashboard View](artifacts\Purchases.png)
 *Figure 2: Main interface of the Purchases view dashboard page*
 
 ---
