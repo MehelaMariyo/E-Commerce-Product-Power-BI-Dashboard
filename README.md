@@ -127,3 +127,19 @@ $$\text{Total Sales} = \sum (\text{totalamount})$$
 ```dax
 Total Sales = SUM(purchases[total_amount])
 ```
+#### 2. Total Quantity
+Aggregates the total physical unit volume processed through the checkout using the `quantity` field.
+$$\text{Total Qty} = \sum (\text{quantity})$$
+
+```dax
+Total Qty = SUM(purchases[quantity])
+```
+
+#### 3. Average Unit Price
+Calculates the statistical arithmetic mean of the item clearing prices captured at the exact moment of transaction using the `unitprice` field.
+$$\text{Avg Unit Price} = \overline{\text{unitprice}}$$
+
+```dax
+Avg Unit Price = AVERAGE(purchases[unit_price])
+```
+
