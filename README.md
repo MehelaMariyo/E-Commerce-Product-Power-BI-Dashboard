@@ -121,8 +121,8 @@ Necessary relationships were implimented between dataset variables as **One-to-M
 ### DAX Mesures Description
 
 #### 1. Total Sales
-Summates the gross transactional monetary value across all order line items.  
-$$\text{Total Sales} = \sum (\text{total_amount})$$
+Summates the gross transactional monetary value across all order line items.  $$\text{Total Sales} = \sum (\text{total_amount})$$
+
 
 ```dax
 TOTAL SALES = SUM(purchases[total_amount])
