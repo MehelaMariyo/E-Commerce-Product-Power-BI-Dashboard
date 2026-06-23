@@ -8,6 +8,8 @@ Used dataset was originally published on Keggle, which contains six separate dat
 
 The **E-Commerce Product Intelligence Dataset** is a synthetically generated, multi-table relational dataset simulating 3.5 years of customer activity for a mid-size online retailer.
 
+[Original link for Keggle dataset](https://www.kaggle.com/datasets/anujsaha0123456789/e-commerce-product-intelligence-dataset) 
+
 ## Dataset Description
 
 | Dataset | Description |
