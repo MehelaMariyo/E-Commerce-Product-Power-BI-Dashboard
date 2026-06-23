@@ -317,7 +317,7 @@ VAR label = FORMAT(a, "#0.0%")
 RETURN label & IF (a>0, "▲", "▼")
 ```
 
-#### 19. Total Sales Trend Color (Hex)
+#### Total Sales Trend Color (Hex)
 Evaluates current performance against the prior year's revenue benchmark to dynamically output a conditional formatting hexadecimal color code string (Green `#85BD5F` for growth, Red `#A83F22` for contraction).  
 
 ```dax
