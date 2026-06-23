@@ -316,8 +316,7 @@ RETURN label & IF (a>0, "▲", "▼")
 ```
 
 #### 19. Total Sales Trend Color (Hex)
-Evaluates current performance against the prior year's revenue benchmark to dynamically output a conditional formatting hexadecimal color code string (Green `#85BD5F` for growth, Red `#A83F22` for contraction).
-$$\text{Total Sales Color} = \begin{cases} \text{"\#85BD5F"} & \text{if } \text{Total Sales} > \text{PY Sales} \\ \text{"\#A83F22"} & \text{otherwise} \end{cases}$$
+Evaluates current performance against the prior year's revenue benchmark to dynamically output a conditional formatting hexadecimal color code string (Green `#85BD5F` for growth, Red `#A83F22` for contraction).  
 
 ```dax
 TOTAL SALES COLOR = IF([TOTAL SALES]>[PY SALES], "#85BD5F", "#A83F22")
