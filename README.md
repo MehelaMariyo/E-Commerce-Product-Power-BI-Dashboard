@@ -1,10 +1,12 @@
 # E-Commerce-Product-Power-BI-Dashboard
 
-Here using data from e-commerce purchasing data, MS Power BI reports were created using robust data modeling and DAX fuctions. Tortal of five report pages were created.
+Here, using data from e-commerce purchasing data, MS Power BI reports were created using robust data modeling and DAX functions. Total of five report pages were created.
+
+[Published Power BI Dashboard](https://app.powerbi.com/links/HVtPa0EhXw?ctid=aa232db2-7a78-4414-a529-33db9124cba7&pbi_source=linkShare&bookmarkGuid=ae25d158-ca45-4df8-afae-ee3161860cc6)
 
 ## About the Dataset
 
-Used dataset was originally published on Keggle, which contains six separate datasets, namely “purchases”, “products”, “users”, “sessions”, “interactions” and “reviews”. For this Power BI project, except “reviews” dataset other five datasets were considered. 
+Used dataset was originally published on Keggle, which contains six separate datasets, namely “purchases”, “products”, “users”, “sessions”, “interactions” and “reviews”. For this Power BI project, except “reviews” dataset, the other five datasets were considered. 
 
 The **E-Commerce Product Intelligence Dataset** is a synthetically generated, multi-table relational dataset simulating 3.5 years of customer activity for a mid-size online retailer.
 
