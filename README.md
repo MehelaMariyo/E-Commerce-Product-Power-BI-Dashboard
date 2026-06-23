@@ -66,38 +66,37 @@ The **E-Commerce Product Intelligence Dataset** is a synthetically generated, mu
 | | `payment_method` | String | - | Payment gateway channel used (e.g., Credit Card, Digital Wallet). |
 | | `shipping_status` | String | - | Lifecycle tracking status of the order line fulfillment. |
 
-## 📐 Data Modeling & Architecture
+## Data Modeling & Architecture
 
-The analytical core of this Power BI project relies on a highly optimized relational data model structured around an extended **Star Schema** workflow. By separating core transactional facts from descriptive entities, the architecture ensures performant cross-filtering, efficient memory footprint utilization, and scalable DAX calculations.
+For use of DAX functions, for visualization and for analytics, it is necessary to model the data using relations they inherit. Following figure 1 attached, represents the used data modeling architecture to map the relationship between datasets. This model structure follows the **Star Schema** workflow. 
 
-### 🖼️ Schema Architecture Diagram
+### Schema Architecture Diagram
 ![E-Commerce Data Model](artifacts/Data%20Model.png)
 *Figure 1: Power BI entity-relationship diagram (ERD) illustrating the relational schema.*
 
 ---
 
-### 🗂️ Data Model Component Breakdowns
+### Data Model Component Breakdowns
 
 The model is cleanly organized into **Dimension Tables** (lookup attributes), **Fact Tables** (event streams/transactions), and a dedicated calculation container:
 
-#### 1. Dimension (Lookup) Tables
+#### 1. Dimension Tables
 *   **`users`**: Contains unique demographics data keyed on `user_id`. It acts as a primary filter anchor to analyze buyer habits across different age groups, country codes, and loyalty tiers.
 *   **`products`**: House parameters for catalog items keyed on `product_id`. It allows granular slicing by categories, subcategories, price ranges, and brands.
 *   **`sessions`**: Captures session metadata keyed on `session_id`. It filters event traffic by acquisition channels (`referrer_source`), hardware platforms (`device_type`), and entry timestamps.
 
-#### 2. Fact (Data Stream) Tables
+#### 2. Fact Tables
 *   **`purchases`**: Holds converted order information, line-item pricing subtotals (`total_amount`), and volumes. This drives the fundamental monetary KPIs throughout the dashboard.
 *   **`interactions`**: Tracks granular web clickstream activities (views, card additions, etc.) to evaluate pre-conversion funnel metrics.
 *   **`reviews`**: Captures user feedback metrics post-purchase, connecting star values and consumer text directly back to items and specific cohorts.
 
-#### 3. Measure Containers
-*   **`DAX Measures`**: A specialized, dedicated table container stripped of raw columns. This isolates calculations from data structures, holding high-value business metrics like `% YOY ACTIVE USER` to keep formula editing clean and maintainable.
+#### 3. Measure Tables
+*   **`DAX Measures`**: Dedicated table for DAX fuctions. This isolates calculations from data structures. This includes metrics like `% YOY ACTIVE USER`, `Previous Year Performances`, `Indications Color` to keep formula editing clean and maintainable.
 
 ---
 
-### 🔗 Cardinality & Relationship Matrix
-
-To enforce clean data integrity and prevent downstream ambiguity, relationships are restricted to strict **One-to-Many ($1:*$)** or **One-to-One ($1:1$)** configurations:
+### Cardinality & Relationship Matrix
+Necessary relationships were implimented between dataset variables as **One-to-Many ($1:*$)** or **One-to-One ($1:1$)**:
 
 | Source Table (1) | Target Table (*) | Connecting Key | Relationship Type | Cross-Filter Direction |
 | :--- | :--- | :---: | :---: | :---: |
@@ -111,4 +110,20 @@ To enforce clean data integrity and prevent downstream ambiguity, relationships 
 | `sessions` | `interactions` | `session_id` | One-to-Many ($1:*$) | Single |
 | `sessions` | `purchases` | `session_id` | One-to-Many ($1:*$) | Single |
 
-> 💡 **Design Strategy Note:** All cross-filter directions are explicitly kept as **Single** where applicable to prevent visual performance degradation, avoid data inflation, and prevent circular relationship pathways.
+## Dashboard Interface 
+
+### Page 1: Purchases & Sales Performance Overview
+![Purchases Dashboard View](assets/Purchases.jpg)
+*Figure 2: Main interface of the Purchases view dashboard page*
+
+---
+
+### DAX Mesures Description
+
+#### 1. Total Sales
+Summates the gross transactional monetary value across all order line items.
+$$\text{Total Sales} = \sum (\text{Quantity} \times \text{Unit Price})$$
+
+```dax
+TOTAL SALES = SUM(purchases[total_amount])
+
