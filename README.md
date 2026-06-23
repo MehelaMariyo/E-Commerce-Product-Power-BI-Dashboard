@@ -113,7 +113,7 @@ Necessary relationships were implimented between dataset variables as **One-to-M
 ## Dashboard Interface 
 
 ### Page 1: Purchases & Sales Performance Overview
-![Purchases Dashboard View](artifacts\Purchases.png)
+![Purchases Dashboard View](artifacts/Purchases.png)
 *Figure 2: Main interface of the Purchases view dashboard page*
 
 ---
@@ -122,7 +122,6 @@ Necessary relationships were implimented between dataset variables as **One-to-M
 
 #### 1. Total Sales
 Summates the gross transactional monetary value across all order line items.  
-
 $$\text{Total Sales} = \sum (\text{total_amount})$$
 
 ```dax
