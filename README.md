@@ -168,7 +168,7 @@ Total Unit Sold = COUNT(purchases[product_id])
 ```
 
 #### 6. TOTAL STOCK
-Calculates the absolute static warehouse inventory capacity across the entire catalog by overriding active filters using the `stock\_quantity` field.  
+Calculates the absolute static warehouse inventory capacity across the entire catalog by overriding active filters using the `stockquantity` field.  
 $$\text{Total Stock} = \sum_{\text{All Products}} (\text{stockquantity})$$
 
 ```dax
@@ -177,7 +177,7 @@ Total Stock = CALCULATE(SUM(products[stock_quantity]), ALL(products))
 
 ### Page 3: Interaction Performance Overview
 ![Interaction Dashboard View](artifacts/Interactions.png)
-*Figure 2: Main interface of the Interaction view dashboard page*
+*Figure 4: Main interface of the Interaction view dashboard page*
 
 ---
 
@@ -228,3 +228,97 @@ VAR engagment_count = CALCULATE(COUNT(interactions[interaction_type]),
 VAR total_views = COUNT(interactions[interaction_id])
 RETURN
 DIVIDE(engagment_count, total_views, 0)
+```
+
+### Page 4: User Performance Overview
+![User Dashboard View](artifacts/Users.png)
+*Figure 5: Main interface of the user view dashboard page*
+
+---
+
+### DAX Mesures Description
+
+#### 1. AVG AGE
+Calculates the statistical arithmetic mean of the user base's demographics using the `age` field to establish baseline cohort profiles.  
+$$\text{Avg Age} = \overline{\text{age}}$$
+
+```dax
+AVG AGE = AVERAGE(users[age])
+```
+
+#### 2. CITY COUNT
+Calculates the total number of unique geographic market locations where registered platform users reside by evaluating distinct values within the `city` attribute.  
+$$\text{City Count} = \text{DistinctCount}(\text{city})$$
+
+```dax
+CITY COUNT = DISTINCTCOUNT(users[city])
+```
+
+#### 3. COUNTRY COUNT
+Calculates the total number of unique sovereign states or national markets where registered platform users reside by evaluating distinct values within the `country` attribute.  
+$$\text{Country Count} = \text{DistinctCount}(\text{country})$$
+
+```dax
+COUNRTY COUNT = DISTINCTCOUNT(users[country])
+```
+
+#### 4. USER COUNT
+Calculates the absolute volume of unique customer profiles registered within the ecosystem by evaluating unique instances of the `userid` attribute.
+$$\text{User Count} = \text{DistinctCount}(\text{userid})$$
+
+```dax
+USER COUNT = DISTINCTCOUNT(users[user_id])
+```
+
+### Page 5: Sessions Performance Overview
+![Sessions Dashboard View](artifacts/Sessions.png)
+*Figure 6: Main interface of the sessions view dashboard page*
+
+---
+
+### DAX Mesures Description
+
+#### 1. ACTIVE USER COUNT
+Calculates the aggregate volume of unique individual customers who actively initiated at least one digital footprint or browsing session on the platform by evaluating distinct instances of the `userid` attribute inside the sessions table.  
+$$\text{Active User Count} = \text{DistinctCount}(\text{sessions.userid})$$
+
+```dax
+ACTIVE USER COUNT = DISTINCTCOUNT(sessions[user_id])
+```
+
+#### 2. SESSION COUNT
+Calculates the absolute number of unique individual traffic visits or browsing sessions initiated on the platform by evaluating distinct instances of the `sessionid` attribute.  
+$$\text{Session Count} = \text{DistinctCount}(\text{sessionid})$$
+
+```dax
+SESSION COUNT = DISTINCTCOUNT(sessions[session_id])
+```
+
+### Example DAX Mesures for other artifacts
+
+#### Prior Year Sales (PY Sales)
+Calculates the total sales performance for the equivalent period in the previous calendar year by shifting the active temporal window back by one full year using the `orderdate` attribute.  
+$$\text{PY Sales} = \text{Total Sales}_{\text{Prior Year}}$$
+
+```dax
+PY SALES = CALCULATE([TOTAL SALES], SAMEPERIODLASTYEAR(purchases[order_date].[Date]))
+```
+
+#### Year-over-Year Sales Growth Percentage (% YOY SALES)
+Calculates the relative percentage shift in gross revenue performance compared to the prior year's temporal baseline, formatting the output into a dynamic string appended with an upward (`▲`) or downward (`▼`) directional trend indicator.  
+$$\text{\% YOY Sales} = \frac{\text{Total Sales} - \text{PY Sales}}{\text{PY Sales}}$$
+
+```dax
+% YOY SALES = 
+VAR a = DIVIDE([TOTAL SALES], [PY SALES], 1)-1
+VAR label = FORMAT(a, "#0.0%")
+RETURN label & IF (a>0, "▲", "▼")
+```
+
+#### 19. Total Sales Trend Color (Hex)
+Evaluates current performance against the prior year's revenue benchmark to dynamically output a conditional formatting hexadecimal color code string (Green `#85BD5F` for growth, Red `#A83F22` for contraction).
+$$\text{Total Sales Color} = \begin{cases} \text{"\#85BD5F"} & \text{if } \text{Total Sales} > \text{PY Sales} \\ \text{"\#A83F22"} & \text{otherwise} \end{cases}$$
+
+```dax
+TOTAL SALES COLOR = IF([TOTAL SALES]>[PY SALES], "#85BD5F", "#A83F22")
+```
